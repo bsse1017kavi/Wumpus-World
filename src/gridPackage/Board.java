@@ -1,12 +1,13 @@
 package gridPackage;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Board
 {
-    final int size = 10;
+    public int size = 4;
 
-    GridCell[][] board = new GridCell[size][size];
+    public GridCell[][] board = new GridCell[size][size];
 
     public Board()
     {
@@ -39,8 +40,8 @@ public class Board
 
         while(pitCounter > 0)
         {
-            int x = random.nextInt(size);
-            int y = random.nextInt(size);
+            int x = random.nextInt(size-1)+1;
+            int y = random.nextInt(size-1)+1;
 
             if(board[x][y].pit != GridStatus.CONFIRMED && board[x][y].wumpus != GridStatus.CONFIRMED)
             {
@@ -51,8 +52,8 @@ public class Board
 
         while(wumpusCounter > 0)
         {
-            int x = random.nextInt(size);
-            int y = random.nextInt(size);
+            int x = random.nextInt(size-1)+1;
+            int y = random.nextInt(size-1)+1;
 
             if(board[x][y].pit != GridStatus.CONFIRMED && board[x][y].wumpus != GridStatus.CONFIRMED)
             {
@@ -72,6 +73,25 @@ public class Board
                 goldCounter--;
             }
         }
+
+        generateEnvironment();
+    }
+
+    public void generateTestBoard(Coordinate wumpus, Coordinate gold, Coordinate[] pits)
+    {
+        for(int i=0;i<size;i++)
+        {
+            for(int j=0;j<size;j++)
+            {
+                board[i][j].setPit(GridStatus.NOT_CONTAINS);
+            }
+        }
+
+        for(Coordinate c: pits)
+            board[c.x][c.y].setPit(GridStatus.CONFIRMED);
+
+        board[wumpus.x][wumpus.y].setWumpus(GridStatus.CONFIRMED);
+        board[gold.x][gold.y].setGold(GridStatus.CONFIRMED);
 
         generateEnvironment();
     }
@@ -189,5 +209,20 @@ public class Board
 
             System.out.println();
         }
+    }
+
+    public ArrayList<GridCell> getAdjacentCells(int x, int y ) {
+        ArrayList<GridCell> list = new ArrayList<>();
+        if(x < size-1)
+            list.add(board[x+1][y]);
+        if(x > 0)
+            list.add(board[x-1][y]);
+
+        if(y < size-1)
+            list.add(board[x][y+1]);
+        if(y > 0)
+            list.add(board[x][y-1]);
+
+        return list;
     }
 }

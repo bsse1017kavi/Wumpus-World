@@ -4,12 +4,14 @@ public class GridCell
 {
     Coordinate coordinate;
 
-    GridStatus pit = GridStatus.UNCONFIRMED;
-    GridStatus breeze = GridStatus.UNCONFIRMED;
-    GridStatus stench = GridStatus.UNCONFIRMED;
-    GridStatus wumpus = GridStatus.UNCONFIRMED;
-    GridStatus glitter = GridStatus.UNCONFIRMED;
-    GridStatus gold = GridStatus.UNCONFIRMED;
+    public GridStatus pit = GridStatus.UNCONFIRMED;
+    public GridStatus breeze = GridStatus.UNCONFIRMED;
+    public GridStatus stench = GridStatus.UNCONFIRMED;
+    public GridStatus wumpus = GridStatus.UNCONFIRMED;
+    public GridStatus glitter = GridStatus.UNCONFIRMED;
+    public GridStatus gold = GridStatus.UNCONFIRMED;
+
+    public boolean visited = false;
 
     public void setPit(GridStatus pit) {
         this.pit = pit;
@@ -21,5 +23,9 @@ public class GridCell
 
     public void setGold(GridStatus gold) {
         this.gold = gold;
+    }
+
+    public void visit(){
+        visited = true;
     }
 }
