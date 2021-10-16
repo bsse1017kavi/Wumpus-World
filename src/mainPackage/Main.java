@@ -27,15 +27,17 @@ public class Main
 
          AI ai = new AI(board);
 
-         //ai.printDanger();
+         ai.playGameBFS();
+//
+//         //ai.printDanger();
+//
+//         ai.makeMove(0,0);
+//         ai.printDanger();
+//
+//         System.out.println();
 
-         ai.makeMove(0,0);
-         ai.printDanger();
-
-         System.out.println();
-
-         ai.makeMove(1,0);
-         ai.printDanger();
+//         ai.makeMove(0,1);
+//         ai.printDanger();
 //         ai.makeMove(1,1);
 //         ai.makeMove(2,1);
 //         ai.makeMove(3,1);
@@ -49,6 +51,8 @@ public class Main
          //System.out.println(ai.board.board[3][1].dangerScore);
 
         //ai.printDanger();
+
+
 
     }
 }

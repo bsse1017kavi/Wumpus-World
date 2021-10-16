@@ -14,6 +14,8 @@ public class GridCell
 
     public double dangerScore = 0;
 
+    public boolean safe = false;
+
     public void setPit(GridStatus pit) {
         this.pit = pit;
     }
