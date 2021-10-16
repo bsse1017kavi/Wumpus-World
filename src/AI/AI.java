@@ -1,6 +1,7 @@
 package AI;
 
 import gridPackage.Board;
+import gridPackage.Coordinate;
 import gridPackage.GridCell;
 import gridPackage.GridStatus;
 
@@ -11,7 +12,7 @@ import java.util.Queue;
 public class AI {
     public Board board = new Board();
     private  Board actualBoard;
-    int x = 0, y = 0;
+    public int x = 0, y = 0;
 
     public AI(Board actualBoard) {
         this.actualBoard = actualBoard;
@@ -136,6 +137,44 @@ public class AI {
             }
         }
 
+    }
+
+    public void playSquidBFS()
+    {
+        ArrayList<GridCell> queue = new ArrayList<>();
+        ArrayList<Coordinate> parent = new ArrayList<>();
+
+        // makeMove(0,0);
+
+        queue.add(board.board[x][y]);
+        parent.add(new Coordinate(-1, -1));
+
+        for(int i = 0; i<queue.size(); i++)
+        {
+            GridCell cell = queue.get(i);
+
+            ArrayList<GridCell> neighbours = board.getAdjacentCells(cell.coordinate.x, cell.coordinate.y);
+
+            for(GridCell neighbour: neighbours)
+            {
+                if(!neighbour.visited && neighbour.safe)
+                {
+                    makeMove(neighbour);
+                    return;
+                }
+
+                if(neighbour.visited && !queue.contains(neighbour))
+                {
+                    queue.add(neighbour);
+                    parent.add(new Coordinate(cell.coordinate.x, cell.coordinate.y));
+                }
+            }
+
+        }
+    }
+
+    private void makeMove(GridCell neighbour) {
+        makeMove(neighbour.coordinate.x, neighbour.coordinate.y);
     }
 
     public void playGameBFS()

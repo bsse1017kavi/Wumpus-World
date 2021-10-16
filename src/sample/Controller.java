@@ -1,9 +1,15 @@
 package sample;
 
+import AI.AI;
+import AI.Action;
 import gridPackage.Board;
 import gridPackage.Coordinate;
 import gridPackage.GridStatus;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
@@ -38,6 +44,31 @@ public class Controller implements Initializable {
         board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
         board.printBoard();
 
+        AI ai = new AI(board);
+        ai.makeMove(0, 0);
+
+        displayBoard(ai);
+
+        Timeline fiveSecondsWonder = new Timeline(
+                new KeyFrame(Duration.seconds(2),
+                        event -> {
+                            ai.playSquidBFS();
+                            clearGrid();
+                            displayBoard(ai);
+
+                        }));
+        fiveSecondsWonder.setCycleCount(4);
+        fiveSecondsWonder.play();
+
+    }
+
+    private void clearGrid() {
+        Node n = grid.getChildren().get(0);
+        grid.getChildren().clear();
+        grid.getChildren().add(n);
+    }
+
+    private void displayBoard(AI ai) {
         for(int i = 0; i<board.size; i++)
         {
             for(int j = 0; j<board.size; j++)
@@ -50,6 +81,9 @@ public class Controller implements Initializable {
         {
             for(int j = 0; j<board.size; j++)
             {
+                if(ai.x == i && ai.y == j)
+                    setImage(i, j, "ai.png");
+
                 if(board.board[i][j].wumpus == GridStatus.CONFIRMED)
                 {
                     setImage(i, j, "monster.gif");
@@ -76,9 +110,6 @@ public class Controller implements Initializable {
                 }
             }
         }
-
-        System.out.println();
-
     }
 
     private void setImage(int i, int j, String fileName) {
@@ -126,4 +157,25 @@ public class Controller implements Initializable {
     public StackPane getNode (final int row, final int column) {
         return (StackPane) grid.getChildren().get(board.size * row + column + 1);
     }
+
+    /*private void shit(int x1, int y1, int x2, int y2) {
+
+
+
+
+        TranslateTransition translateTransition = new TranslateTransition();
+        translateTransition.setDuration(Duration.seconds(3));
+        translateTransition.setToX(20);
+        translateTransition.setToY(20);
+        translateTransition.setNode(r);
+        translateTransition.play();
+        //when translation is finished remove from original location
+        //add to desired location and set translation to 0
+        translateTransition.setOnFinished(e->{
+            grid.getChildren().remove(r);
+            r.setTranslateX(0); r.setTranslateY(0);
+            grid.add(r, 1, 4);
+        });
+
+    }*/
 }
