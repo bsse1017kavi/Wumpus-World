@@ -16,6 +16,7 @@ public class Board
             for(int j=0;j<size;j++)
             {
                 board[i][j] = new GridCell();
+                board[i][j].coordinate = new Coordinate(i,j);
             }
         }
     }

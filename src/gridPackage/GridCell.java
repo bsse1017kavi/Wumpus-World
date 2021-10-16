@@ -2,16 +2,17 @@ package gridPackage;
 
 public class GridCell
 {
-    Coordinate coordinate;
+    public Coordinate coordinate;
 
     public GridStatus pit = GridStatus.UNCONFIRMED;
     public GridStatus breeze = GridStatus.UNCONFIRMED;
     public GridStatus stench = GridStatus.UNCONFIRMED;
     public GridStatus wumpus = GridStatus.UNCONFIRMED;
-    public GridStatus glitter = GridStatus.UNCONFIRMED;
     public GridStatus gold = GridStatus.UNCONFIRMED;
 
     public boolean visited = false;
+
+    public double dangerScore = 0;
 
     public void setPit(GridStatus pit) {
         this.pit = pit;

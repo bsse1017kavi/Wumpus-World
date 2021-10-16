@@ -4,8 +4,6 @@ import AI.AI;
 import gridPackage.Board;
 import gridPackage.Coordinate;
 
-import java.util.ArrayList;
-
 
 public class Main
 {
@@ -18,7 +16,39 @@ public class Main
         board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
         board.printBoard();
 
-        // AI ai = new AI();
+        System.out.println();
+
+//        ArrayList<GridCell> moves = board.getAdjacentCells(1,2);
+//
+//        for(GridCell move: moves)
+//        {
+//            System.out.println(move.coordinate);
+//        }
+
+         AI ai = new AI(board);
+
+         //ai.printDanger();
+
+         ai.makeMove(0,0);
+         ai.printDanger();
+
+         System.out.println();
+
+         ai.makeMove(1,0);
+         ai.printDanger();
+//         ai.makeMove(1,1);
+//         ai.makeMove(2,1);
+//         ai.makeMove(3,1);
+//         ai.makeMove(3,0);
+
+        //ai.printDanger();
+
+         //System.out.println(ai.findMove(3,0).coordinate);
+
+         //System.out.println(ai.board.board[2][0].dangerScore);
+         //System.out.println(ai.board.board[3][1].dangerScore);
+
+        //ai.printDanger();
 
     }
 }
