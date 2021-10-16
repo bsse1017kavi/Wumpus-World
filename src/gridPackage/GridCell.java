@@ -27,6 +27,8 @@ public class GridCell
     }
 
     public void visit(){
+        pit = GridStatus.NOT_CONTAINS;
+        wumpus = GridStatus.NOT_CONTAINS;
         visited = true;
     }
 }
