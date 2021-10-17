@@ -60,15 +60,8 @@ public class AI {
         }
 
         ArrayList<WrappedCell> queue = new ArrayList<>();
-        // ArrayList<Coordinate> parent = new ArrayList<>();
-        // ArrayList<Integer> parent2 = new ArrayList<>();
-
-
-        // makeMove(0,0);
 
         queue.add(new WrappedCell(board.board[x][y], 0));
-        // parent.add(new Coordinate(x, y));
-        // parent2.add(0);
 
         for(int i = 0; i<queue.size(); i++)
         {
@@ -81,15 +74,12 @@ public class AI {
                 if(!neighbour.visited && neighbour.safe)
                 {
                     WrappedCell box = new WrappedCell(neighbour, i);
-                    // path.push(neighbour.coordinate);
 
-                    // Coordinate c = cell.coordinate;
                     while (!box.cell.coordinate.equals(new Coordinate(x, y))) {
                         path.push(box.cell.coordinate);
                         box = queue.get(box.parentIndex);
                     }
 
-                    // makeMove(neighbour);
                     makeMove(path.pop());
                     return;
                 }
@@ -97,8 +87,6 @@ public class AI {
                 if(neighbour.visited && !queue.contains(neighbour))
                 {
                     queue.add(new WrappedCell(neighbour, i));
-                    // parent.add(new Coordinate(cell.coordinate.x, cell.coordinate.y));
-                    // parent2.add(i);
                 }
 
             }

@@ -44,7 +44,6 @@ public class EditorController implements Initializable {
 
         board = new Board();
         board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
-        board.printBoard();
 
         AI ai = new AI(board);
         ai.makeMove(0, 0);
@@ -79,7 +78,7 @@ public class EditorController implements Initializable {
 
                 if(board.board[i][j].wumpus == GridStatus.CONFIRMED)
                 {
-                    setImage(i, j, "monster.gif");
+                    setImage(i, j, "monster2.gif");
                 }
 
                 if(board.board[i][j].gold == GridStatus.CONFIRMED)
@@ -108,7 +107,6 @@ public class EditorController implements Initializable {
 
     private void loadPopUp(double x, double y) {
         try {
-            // getNode(0, 0).getChildren().add(FXMLLoader.load(getClass().getResource("popUp.fxml")));
             Node n = FXMLLoader.load(getClass().getResource("popUp.fxml"));
             n.setOnMouseClicked(e -> {
                 anchorPane.getChildren().remove(anchorPane.getChildren().size()-1);
@@ -173,17 +171,10 @@ public class EditorController implements Initializable {
 
     @FXML
     private void mouseEntered(MouseEvent e) {
-//        Node source = ((GridPane)e.getSource()).get ;
-//        System.out.println(source);
-//        Integer colIndex = GridPane.getColumnIndex(source);
-//        Integer rowIndex = GridPane.getRowIndex(source);
-//        System.out.printf("Mouse entered cell [%d, %d]%n", colIndex, rowIndex);
-//        System.out.println(e.getButton());
-//        System.out.println(e.getX());
+
         System.out.println(e.getSceneX());
         System.out.println(e.getSceneY());
 
-//        System.out.println(e.getPickResult().getIntersectedNode());
         Node node = (Node) e.getPickResult().getIntersectedNode();
 
         boolean clicked = false;
