@@ -1,45 +1,41 @@
-package sample;
+package editorScreen;
 
 import AI.AI;
-import AI.Action;
-import editorScreen.EditorMain;
 import gridPackage.Board;
 import gridPackage.Coordinate;
 import gridPackage.GridStatus;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class EditorController implements Initializable {
 
     @FXML
     GridPane grid;
 
     @FXML
-    StackPane stackPane;
+    AnchorPane anchorPane;
 
     Board board;
+    boolean popUpOpen = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -55,35 +51,7 @@ public class Controller implements Initializable {
 
         displayBoard(ai);
 
-        Timeline fiveSecondsWonder = new Timeline(
-                new KeyFrame(Duration.seconds(1),
-                        event -> {
-                            EditorMain.s++;
-                            if(ai.score == 1000)
-                            {
-                                if(stackPane.getChildren().size() == 0)
-                                {
-                                    stackPane.getChildren().add(getImageView("win.gif", 200, 600));
-                                    System.out.println("WIN");
-                                }
-                            }
-                            else if (ai.score == -1000)
-                            {
-                                if(stackPane.getChildren().size() == 0)
-                                {
-                                    stackPane.getChildren().add(getImageView("loss.gif", 200, 600));
-                                    System.out.println("LOSS");
-                                }
-                            }
-                            else {
-                                ai.playSquidBFS();
-                                clearGrid();
-                                displayBoard(ai);
-                            }
 
-                        }));
-        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
-        fiveSecondsWonder.play();
 
     }
 
@@ -135,6 +103,24 @@ public class Controller implements Initializable {
                 }
             }
         }
+
+    }
+
+    private void loadPopUp(double x, double y) {
+        try {
+            // getNode(0, 0).getChildren().add(FXMLLoader.load(getClass().getResource("popUp.fxml")));
+            Node n = FXMLLoader.load(getClass().getResource("popUp.fxml"));
+            n.setOnMouseClicked(e -> {
+                anchorPane.getChildren().remove(anchorPane.getChildren().size()-1);
+                popUpOpen = false;
+            });
+            n.setTranslateX(x - 120);
+            n.setTranslateY(y - 90);
+            anchorPane.getChildren().add(n);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setImage(int i, int j, String fileName) {
@@ -172,9 +158,6 @@ public class Controller implements Initializable {
         return imageView;
     }
 
-    private void addToCell(Node r, int x, int y) {
-        getNode(x, y).getChildren().add(r);
-    }
 
     private void addNewElement(Node r, int x, int y) {
         grid.add(r, y, x);
@@ -188,24 +171,64 @@ public class Controller implements Initializable {
         return (StackPane) grid.getChildren().get(board.size * row + column + 1);
     }
 
-    /*private void shit(int x1, int y1, int x2, int y2) {
+    @FXML
+    private void mouseEntered(MouseEvent e) {
+//        Node source = ((GridPane)e.getSource()).get ;
+//        System.out.println(source);
+//        Integer colIndex = GridPane.getColumnIndex(source);
+//        Integer rowIndex = GridPane.getRowIndex(source);
+//        System.out.printf("Mouse entered cell [%d, %d]%n", colIndex, rowIndex);
+//        System.out.println(e.getButton());
+//        System.out.println(e.getX());
+        System.out.println(e.getSceneX());
+        System.out.println(e.getSceneY());
+
+//        System.out.println(e.getPickResult().getIntersectedNode());
+        Node node = (Node) e.getPickResult().getIntersectedNode();
+
+        boolean clicked = false;
+
+        if(node instanceof StackPane)
+            clicked = true;
+
+        Node p = node.getParent();
+        while (p != null && !(p instanceof StackPane))
+            p = p.getParent();
+
+        if(p!=null)
+            clicked = true;
+
+        if(clicked)
+            {
+                openClosePopUp(e);
+            }
 
 
+    }
 
+    private void openClosePopUp(MouseEvent e) {
+        if(!popUpOpen)
+        {
+            loadPopUp(processX(e), processY(e));
+            // ((Node)e.getSource()).setStyle("-fx-border-color:red; -fx-border-width:2px;");
+            popUpOpen = true;
+        }
+        else
+        {
+            anchorPane.getChildren().remove(anchorPane.getChildren().size()-1);
+            popUpOpen = false;
+        }
+    }
 
-        TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.seconds(3));
-        translateTransition.setToX(20);
-        translateTransition.setToY(20);
-        translateTransition.setNode(r);
-        translateTransition.play();
-        //when translation is finished remove from original location
-        //add to desired location and set translation to 0
-        translateTransition.setOnFinished(e->{
-            grid.getChildren().remove(r);
-            r.setTranslateX(0); r.setTranslateY(0);
-            grid.add(r, 1, 4);
-        });
+    private double processX(MouseEvent e) {
+        double x = e.getSceneX();
+        x = Math.floor((x - 157) / 82.4) * 82.4 + 200;
+        return x;
+    }
 
-    }*/
+    private double processY(MouseEvent e) {
+        double y = e.getSceneY();
+        y = Math.floor((y - 115) / 56.9) * 57.25 + 143;
+        return y;
+    }
 }
