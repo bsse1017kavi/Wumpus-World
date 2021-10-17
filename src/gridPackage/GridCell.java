@@ -28,9 +28,12 @@ public class GridCell
         this.gold = gold;
     }
 
-    public void visit(){
-        pit = GridStatus.NOT_CONTAINS;
-        wumpus = GridStatus.NOT_CONTAINS;
+    public int visit(){
         visited = true;
+        if (wumpus == GridStatus.CONFIRMED || pit == GridStatus.CONFIRMED)
+            return  -1000;
+        else if (gold == GridStatus.CONFIRMED)
+            return  1000;
+        return 0;
     }
 }

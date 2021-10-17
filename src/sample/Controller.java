@@ -52,12 +52,20 @@ public class Controller implements Initializable {
         Timeline fiveSecondsWonder = new Timeline(
                 new KeyFrame(Duration.seconds(2),
                         event -> {
-                            ai.playSquidBFS();
-                            clearGrid();
-                            displayBoard(ai);
+                            if(ai.score == 1000)
+                            {
+                                System.out.println("WIN");
+                            }
+                            else if (ai.score == -1000)
+                                System.out.println("Lost");
+                            else {
+                                ai.playSquidBFS();
+                                clearGrid();
+                                displayBoard(ai);
+                            }
 
                         }));
-        fiveSecondsWonder.setCycleCount(4);
+        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
 
     }

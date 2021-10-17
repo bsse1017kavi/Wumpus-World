@@ -30,7 +30,7 @@ public class Main
 //         ai.makeMove(0, 0);
 //         ai.playSquidBFS();
 
-         ai.playGameBFS();
+         // ai.playGameBFS();
 //
 //         //ai.printDanger();
 //

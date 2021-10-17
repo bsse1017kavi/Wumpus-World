@@ -5,14 +5,15 @@ import gridPackage.Coordinate;
 import gridPackage.GridCell;
 import gridPackage.GridStatus;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Queue;
+import java.util.Stack;
 
 public class AI {
     public Board board = new Board();
     private  Board actualBoard;
     public int x = 0, y = 0;
+    Stack<Coordinate> path = new Stack<>();
+    public int score = 0;
 
     public AI(Board actualBoard) {
         this.actualBoard = actualBoard;
@@ -56,102 +57,27 @@ public class AI {
         return minCell;
     }
 
-    public void playGame()
-    {
-        makeMove(0,0);
-
-        int currentX = 0;
-        int currentY = 0;
-
-        GridCell nextMove = null;
-
-        for(int i=0;i<5;i++)
-        {
-            ArrayList<GridCell> cells = board.getAdjacentCells(currentX,currentY);
-
-            int unvisitedCells = 0;
-            int safeCells = 0;
-
-            boolean hasMove = false;
-
-            for(GridCell cell: cells)
-            {
-                if(!cell.visited)
-                {
-                    unvisitedCells++;
-                    if(cell.safe)
-                    {
-                        safeCells++;
-                        nextMove = cell;
-                        hasMove = true;
-                        //break;
-                    }
-                }
-
-                else
-                {
-                    if(cell.safe)
-                    {
-                        safeCells++;
-                    }
-                }
-            }
-
-            if(safeCells==0)
-            {
-                for(GridCell cell: cells)
-                {
-                    if(!cell.visited)
-                    {
-                        nextMove = cell;
-                        hasMove = true;
-                        //break;
-                    }
-                }
-            }
-
-            if(unvisitedCells==0)
-            {
-                for(GridCell cell: cells)
-                {
-                    if(cell.safe)
-                    {
-                        nextMove = cell;
-                        hasMove = true;
-                        //break;
-                    }
-                }
-            }
-
-            if(hasMove)
-            {
-                System.out.println(nextMove.coordinate);
-                makeMove(nextMove.coordinate.x, nextMove.coordinate.y);
-                currentX = nextMove.coordinate.x;
-                currentY = nextMove.coordinate.y;
-            }
-
-            else
-            {
-                System.out.println("No more move");
-            }
-        }
-
-    }
-
     public void playSquidBFS()
     {
-        ArrayList<GridCell> queue = new ArrayList<>();
-        ArrayList<Coordinate> parent = new ArrayList<>();
+        if(!path.empty()){
+            makeMove(path.pop());
+            return;
+        }
+
+        ArrayList<WrappedCell> queue = new ArrayList<>();
+        // ArrayList<Coordinate> parent = new ArrayList<>();
+        // ArrayList<Integer> parent2 = new ArrayList<>();
+
 
         // makeMove(0,0);
 
-        queue.add(board.board[x][y]);
-        parent.add(new Coordinate(-1, -1));
+        queue.add(new WrappedCell(board.board[x][y], 0));
+        // parent.add(new Coordinate(x, y));
+        // parent2.add(0);
 
         for(int i = 0; i<queue.size(); i++)
         {
-            GridCell cell = queue.get(i);
+            GridCell cell = queue.get(i).cell;
 
             ArrayList<GridCell> neighbours = board.getAdjacentCells(cell.coordinate.x, cell.coordinate.y);
 
@@ -159,15 +85,27 @@ public class AI {
             {
                 if(!neighbour.visited && neighbour.safe)
                 {
-                    makeMove(neighbour);
+                    WrappedCell box = new WrappedCell(neighbour, i);
+                    // path.push(neighbour.coordinate);
+
+                    // Coordinate c = cell.coordinate;
+                    while (!box.cell.coordinate.equals(new Coordinate(x, y))) {
+                        path.push(box.cell.coordinate);
+                        box = queue.get(box.parentIndex);
+                    }
+
+                    // makeMove(neighbour);
+                    makeMove(path.pop());
                     return;
                 }
 
                 if(neighbour.visited && !queue.contains(neighbour))
                 {
-                    queue.add(neighbour);
-                    parent.add(new Coordinate(cell.coordinate.x, cell.coordinate.y));
+                    queue.add(new WrappedCell(neighbour, i));
+                    // parent.add(new Coordinate(cell.coordinate.x, cell.coordinate.y));
+                    // parent2.add(i);
                 }
+
             }
 
         }
@@ -177,47 +115,51 @@ public class AI {
         makeMove(neighbour.coordinate.x, neighbour.coordinate.y);
     }
 
-    public void playGameBFS()
-    {
-        Queue<GridCell> queue = new ArrayDeque<>();
-
-        //makeMove(0,0);
-
-        ((ArrayDeque<GridCell>) queue).push(board.board[0][0]);
-
-        ArrayList<GridCell> unsafeMoves = new ArrayList<>();
-
-        while (queue.size() != 0)
-        {
-            int safeCounter = 0;
-
-            GridCell cell = queue.poll();
-
-            makeMove(cell.coordinate.x, cell.coordinate.y);
-
-            ArrayList<GridCell> neighbours = board.getAdjacentCells(cell.coordinate.x, cell.coordinate.y);
-
-            for(GridCell neighbour: neighbours)
-            {
-                if(!neighbour.visited && !queue.contains(neighbour) && neighbour.safe)
-                {
-                    neighbour.visit();
-                    ((ArrayDeque<GridCell>) queue).push(neighbour);
-                }
-
-                else if(!neighbour.visited && !queue.contains(neighbour))
-                {
-                    unsafeMoves.add(cell);
-                }
-            }
-
-        }
-
-        for(GridCell cell: unsafeMoves)
-        {
-            makeMove(cell.coordinate.x, cell.coordinate.y);
-        }
+    private void makeMove(Coordinate neighbour) {
+        makeMove(neighbour.x, neighbour.y);
     }
+
+//    public void playGameBFS()
+//    {
+//        Queue<GridCell> queue = new ArrayDeque<>();
+//
+//        //makeMove(0,0);
+//
+//        ((ArrayDeque<GridCell>) queue).push(board.board[0][0]);
+//
+//        ArrayList<GridCell> unsafeMoves = new ArrayList<>();
+//
+//        while (queue.size() != 0)
+//        {
+//            int safeCounter = 0;
+//
+//            GridCell cell = queue.poll();
+//
+//            makeMove(cell.coordinate.x, cell.coordinate.y);
+//
+//            ArrayList<GridCell> neighbours = board.getAdjacentCells(cell.coordinate.x, cell.coordinate.y);
+//
+//            for(GridCell neighbour: neighbours)
+//            {
+//                if(!neighbour.visited && !queue.contains(neighbour) && neighbour.safe)
+//                {
+//                    neighbour.visit();
+//                    ((ArrayDeque<GridCell>) queue).push(neighbour);
+//                }
+//
+//                else if(!neighbour.visited && !queue.contains(neighbour))
+//                {
+//                    unsafeMoves.add(cell);
+//                }
+//            }
+//
+//        }
+//
+//        for(GridCell cell: unsafeMoves)
+//        {
+//            makeMove(cell.coordinate.x, cell.coordinate.y);
+//        }
+//    }
 
     public void makeMove(int x, int y)
     {
@@ -226,6 +168,9 @@ public class AI {
 
         board.board[x][y].breeze = actualBoard.board[x][y].breeze;
         board.board[x][y].stench = actualBoard.board[x][y].stench;
+        board.board[x][y].wumpus = actualBoard.board[x][y].wumpus;
+        board.board[x][y].pit = actualBoard.board[x][y].pit;
+        board.board[x][y].gold = actualBoard.board[x][y].gold;
 
         updateCellInfo(board.board[x][y]);
 
@@ -236,9 +181,9 @@ public class AI {
         System.out.println();
     }
 
-    public Action updateCellInfo(GridCell cell){
+    public void updateCellInfo(GridCell cell){
         board.board[x][y] = cell;
-        cell.visit();
+        score = cell.visit();
 
         ArrayList<GridCell> cells = board.getAdjacentCells(x, y);
         for(GridCell c: cells) {
@@ -262,13 +207,6 @@ public class AI {
 
         }
 
-        // count the number of cells where wumpus or pit is probable. If probable == 1 then make it confirmed.
-
-
-
-
-
-        return null;
     }
 
     public void setDangerScore(GridCell cell)
@@ -322,4 +260,14 @@ public class AI {
 
 
 
+}
+
+class WrappedCell {
+    GridCell cell;
+    int parentIndex;
+
+    public WrappedCell(GridCell cell, int parentIndex) {
+        this.cell = cell;
+        this.parentIndex = parentIndex;
+    }
 }
