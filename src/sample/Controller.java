@@ -49,7 +49,7 @@ public class Controller implements Initializable {
         board = new Board();
 
         //board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
-        board.generateRandomBoard(5,2,1);
+        board.generateRandomBoard(5,2,2);
 
         board.printBoard();
 
@@ -62,7 +62,7 @@ public class Controller implements Initializable {
                 new KeyFrame(Duration.seconds(1),
                         event -> {
                             EditorMain.s++;
-                            if(ai.score == 1000)
+                            if(ai.checkWin())
                             {
                                 if(stackPane.getChildren().size() == 0)
                                 {

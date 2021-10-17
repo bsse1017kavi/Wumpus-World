@@ -33,7 +33,10 @@ public class GridCell
         if (wumpus == GridStatus.CONFIRMED || pit == GridStatus.CONFIRMED)
             return  -1000;
         else if (gold == GridStatus.CONFIRMED)
+        {
+            //this.gold = GridStatus.NOT_CONTAINS;
             return  1000;
+        }
         return 0;
     }
 }

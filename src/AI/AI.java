@@ -15,8 +15,20 @@ public class AI {
     Stack<Coordinate> path = new Stack<>();
     public int score = 0;
 
+    private int winScore;
+
+    public int wumpusNumber;
+    public int goldNumber;
+
+    boolean arrowAvailable = true;
+
     public AI(Board actualBoard) {
         this.actualBoard = actualBoard;
+        wumpusNumber = actualBoard.numberOfWumpus;
+        goldNumber = actualBoard.numberOfGold;
+
+        winScore = 1000*goldNumber;
+
     }
 
 
@@ -157,7 +169,12 @@ public class AI {
 
         else
         {
-            shootArrow(direction);
+            if(arrowAvailable)
+            {
+                shootArrow(direction);
+                arrowAvailable = false;
+            }
+
         }
     }
 
@@ -183,9 +200,25 @@ public class AI {
         System.out.println();
     }
 
+    public boolean checkWin()
+    {
+        if(score==winScore)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public void updateCellInfo(GridCell cell){
         board.board[x][y] = cell;
-        score = cell.visit();
+        score += cell.visit();
+
+        if(cell.visit()==1000)
+        {
+            board.board[x][y].gold = GridStatus.NOT_CONTAINS;
+            actualBoard.board[x][y].gold = GridStatus.NOT_CONTAINS;
+        }
 
         ArrayList<GridCell> cells = board.getAdjacentCells(x, y);
         for(GridCell c: cells) {
@@ -252,7 +285,7 @@ public class AI {
             for(int j=0;j<board.size;j++)
             {
 //                System.out.print(board.board[i][j].dangerScore);
-                System.out.print(board.board[i][j].pit);
+                System.out.print(board.board[i][j].wumpus);
                 System.out.print("\t");
             }
 
@@ -265,6 +298,8 @@ public class AI {
     {
         Coordinate arrowPosition = new Coordinate(this.x,this.y);
 
+        boolean hit = false;
+
         if(direction.equals("up"))
         {
             while(arrowPosition.x >= 0)
@@ -274,10 +309,26 @@ public class AI {
                 if(wumpusCheck(arrowPosition))
                 {
                     System.out.println("Wumpus Died!");
+                    hit = true;
+
+                    //make adjacent cell wumpus safe
+                    board.board[x-1][y].wumpus = GridStatus.NOT_CONTAINS;
+
                     break;
                 }
 
                 arrowPosition.x--;
+            }
+
+            if(!hit)
+            {
+                arrowPosition = new Coordinate(this.x,this.y);
+
+                while(arrowPosition.x >= 0)
+                {
+                    board.board[arrowPosition.x][arrowPosition.y].wumpus = GridStatus.NOT_CONTAINS;
+                    arrowPosition.x--;
+                }
             }
         }
 
@@ -290,10 +341,25 @@ public class AI {
                 if(wumpusCheck(arrowPosition))
                 {
                     System.out.println("Wumpus Died!");
+                    hit = true;
+
+                    //make adjacent cell wumpus safe
+                    board.board[x+1][y].wumpus = GridStatus.NOT_CONTAINS;
                     break;
                 }
 
                 arrowPosition.x++;
+            }
+
+            if(!hit)
+            {
+                arrowPosition = new Coordinate(this.x,this.y);
+
+                while(arrowPosition.x < board.size)
+                {
+                    board.board[arrowPosition.x][arrowPosition.y].wumpus = GridStatus.NOT_CONTAINS;
+                    arrowPosition.x++;
+                }
             }
         }
 
@@ -306,10 +372,25 @@ public class AI {
                 if(wumpusCheck(arrowPosition))
                 {
                     System.out.println("Wumpus Died!");
+                    hit = true;
+
+                    //make adjacent cell wumpus safe
+                    board.board[x][y-1].wumpus = GridStatus.NOT_CONTAINS;
                     break;
                 }
 
                 arrowPosition.y--;
+            }
+
+            if(!hit)
+            {
+                arrowPosition = new Coordinate(this.x,this.y);
+
+                while(arrowPosition.y >= 0)
+                {
+                    board.board[arrowPosition.x][arrowPosition.y].wumpus = GridStatus.NOT_CONTAINS;
+                    arrowPosition.y--;
+                }
             }
         }
 
@@ -322,10 +403,25 @@ public class AI {
                 if(wumpusCheck(arrowPosition))
                 {
                     System.out.println("Wumpus Died!");
+                    hit = true;
+
+                    //make adjacent cell wumpus safe
+                    board.board[x][y+1].wumpus = GridStatus.NOT_CONTAINS;
                     break;
                 }
 
                 arrowPosition.y++;
+            }
+
+            if(!hit)
+            {
+                arrowPosition = new Coordinate(this.x,this.y);
+
+                while(arrowPosition.y < board.size)
+                {
+                    board.board[arrowPosition.x][arrowPosition.y].wumpus = GridStatus.NOT_CONTAINS;
+                    arrowPosition.y++;
+                }
             }
         }
     }
@@ -335,6 +431,8 @@ public class AI {
         if(actualBoard.board[coordinate.x][coordinate.y].wumpus == GridStatus.CONFIRMED)
         {
             actualBoard.board[coordinate.x][coordinate.y].wumpus = GridStatus.NOT_CONTAINS;
+            actualBoard.generateEnvironment();
+            wumpusNumber--;
             return true;
         }
 
