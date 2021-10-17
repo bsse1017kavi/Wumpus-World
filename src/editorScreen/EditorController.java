@@ -34,7 +34,7 @@ public class EditorController implements Initializable {
     GridPane grid;
 
     @FXML
-    AnchorPane anchorPane;
+    AnchorPane anchorPane, pain2, banner;
 
     @FXML
     Button confirmButton, clearButton, playButton, pauseButton, resetButton;
@@ -58,6 +58,8 @@ public class EditorController implements Initializable {
         ai.makeMove(0, 0);
 
         displayBoard(ai);
+        displayBoard(ai);
+
 
 
 
@@ -226,28 +228,38 @@ public class EditorController implements Initializable {
         System.out.println(e.getSceneY());
 
         Node node = (Node) e.getPickResult().getIntersectedNode();
+        System.out.println("Baal");
+        System.out.println();
 
         boolean clicked = false;
         StackPane stackPane = new StackPane();
 
         if(node instanceof StackPane)
         {
+            System.out.println("Node");
+            System.out.println(node);
             clicked = true;
             stackPane = (StackPane) node;
         }
 
-        Node p = node.getParent();
-        while (p != null && !(p instanceof StackPane))
-            p = p.getParent();
-
-        if(p!=null)
-        {
-            clicked = true;
-            stackPane = (StackPane) p;
+        if(!clicked) {
+            Node p = node.getParent();
+            while (p != null && !(p instanceof StackPane))
+            {
+                System.out.println("Sure");
+                System.out.println(p);
+                p = p.getParent();
+            }
+            if(p!=null)
+            {
+                clicked = true;
+                stackPane = (StackPane) p;
+            }
         }
 
         if(clicked)
             {
+                System.out.println("Clicked, I guess!");
                 openClosePopUp(e, stackPane);
             }
 
@@ -258,7 +270,12 @@ public class EditorController implements Initializable {
         if(!popUpOpen)
         {
             System.out.println(e.getSource());
-            loadPopUp(processX(e), processY(e));
+            System.out.println("Shit:");
+            System.out.println(pane.getWidth());
+            System.out.println(e.getSceneX() + ", " + e.getSceneY());
+            System.out.println( processX(e, pane.getWidth()) + ", " + processY(e));
+            System.out.println("\n\n");
+            loadPopUp(processX(e, pane.getWidth()), processY(e));
             // ((Node)e.getSource()).setStyle("-fx-border-color:red; -fx-border-width:2px;");
             popUpOpen = true;
         }
@@ -269,9 +286,9 @@ public class EditorController implements Initializable {
         }
     }
 
-    private double processX(MouseEvent e) {
+    private double processX(MouseEvent e, double width) {
         double x = e.getSceneX();
-        x = Math.floor((x - 157) / 82.4) * 82.4 + 200;
+        x = Math.floor((x - 157) / 82.4) * 82.4 + 157 + width / 2;
         return x;
     }
 
@@ -288,12 +305,14 @@ public class EditorController implements Initializable {
         int nG = Integer.parseInt(goldN.getText().trim());
         int nW = Integer.parseInt(wumpusN.getText().trim());
 
+        banner.getChildren().clear();
+
         // board = new Board();
         // board.generateRandomBoard(nP, nW, nG);
 
         board = new Board();
         //board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
-        board.generateRandomBoard(5,2,1);
+        board.generateRandomBoard(nP, nW, nG);
 
         board.printBoard();
 
@@ -303,27 +322,19 @@ public class EditorController implements Initializable {
         displayBoard(ai);
 
         fiveSecondsWonder = new Timeline(
-                new KeyFrame(Duration.seconds(1),
+                new KeyFrame(Duration.seconds(0.5),
                         event -> {
                             if(ai.score == 1000)
                             {
                                 System.out.println("WIN");
+                                banner.getChildren().add(getImageView("win3.gif", 160, 220)); //130, 219
                                 fiveSecondsWonder.stop();
-//                                if(stackPane.getChildren().size() == 0)
-//                                {
-//                                    stackPane.getChildren().add(getImageView("win.gif", 200, 600));
-//                                    System.out.println("WIN");
-//                                }
                             }
                             else if (ai.score == -1000)
                             {
                                 System.out.println("LOSE");
+                                banner.getChildren().add(getImageView("loss2.gif", 130, 219)); //130, 219
                                 fiveSecondsWonder.stop();
-//                                if(stackPane.getChildren().size() == 0)
-//                                {
-//                                    stackPane.getChildren().add(getImageView("loss.gif", 200, 600));
-//                                    System.out.println("LOSS");
-//                                }
                             }
                             else {
                                 ai.playSquidBFS();
@@ -334,5 +345,12 @@ public class EditorController implements Initializable {
                         }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
+    }
+
+    @FXML
+    public void clearText(){
+        pitN.clear();
+        wumpusN.clear();
+        goldN.clear();
     }
 }
