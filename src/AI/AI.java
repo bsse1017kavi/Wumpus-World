@@ -108,55 +108,10 @@ public class AI {
         //check wumpus shootable spot
     }
 
-    private void makeMove(GridCell neighbour) {
-        makeMove(neighbour.coordinate.x, neighbour.coordinate.y);
-    }
 
     private void makeMove(Coordinate neighbour) {
         makeMove(neighbour.x, neighbour.y);
     }
-
-//    public void playGameBFS()
-//    {
-//        Queue<GridCell> queue = new ArrayDeque<>();
-//
-//        //makeMove(0,0);
-//
-//        ((ArrayDeque<GridCell>) queue).push(board.board[0][0]);
-//
-//        ArrayList<GridCell> unsafeMoves = new ArrayList<>();
-//
-//        while (queue.size() != 0)
-//        {
-//            int safeCounter = 0;
-//
-//            GridCell cell = queue.poll();
-//
-//            makeMove(cell.coordinate.x, cell.coordinate.y);
-//
-//            ArrayList<GridCell> neighbours = board.getAdjacentCells(cell.coordinate.x, cell.coordinate.y);
-//
-//            for(GridCell neighbour: neighbours)
-//            {
-//                if(!neighbour.visited && !queue.contains(neighbour) && neighbour.safe)
-//                {
-//                    neighbour.visit();
-//                    ((ArrayDeque<GridCell>) queue).push(neighbour);
-//                }
-//
-//                else if(!neighbour.visited && !queue.contains(neighbour))
-//                {
-//                    unsafeMoves.add(cell);
-//                }
-//            }
-//
-//        }
-//
-//        for(GridCell cell: unsafeMoves)
-//        {
-//            makeMove(cell.coordinate.x, cell.coordinate.y);
-//        }
-//    }
 
     public void searchAndShoot()
     {
