@@ -7,6 +7,8 @@ public class Board
 {
     public int size = 10;
 
+    //public int size = 4;
+
     public GridCell[][] board = new GridCell[size][size];
 
     public Board()
@@ -40,6 +42,8 @@ public class Board
             for(int j=0;j<size;j++)
             {
                 board[i][j].setPit(GridStatus.NOT_CONTAINS);
+                board[i][j].setWumpus(GridStatus.NOT_CONTAINS);
+                board[i][j].setGold(GridStatus.NOT_CONTAINS);
             }
         }
 

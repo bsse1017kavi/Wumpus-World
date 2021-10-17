@@ -19,11 +19,6 @@ public class AI {
         this.actualBoard = actualBoard;
     }
 
-    //    GridCell cell;
-//
-//    public AI(GridCell cell){
-//        this.cell = cell;
-//    }
 
     public GridCell findMove(int x, int y)
     {
@@ -97,6 +92,8 @@ public class AI {
             }
 
         }
+
+        //check wumpus shootable spot
     }
 
     private void makeMove(GridCell neighbour) {
@@ -149,6 +146,21 @@ public class AI {
 //        }
 //    }
 
+    public void searchAndShoot()
+    {
+        String direction = wumpusShootable(new Coordinate(this.x, this.y));
+
+        if(direction.equals("No"))
+        {
+            return;
+        }
+
+        else
+        {
+            shootArrow(direction);
+        }
+    }
+
     public void makeMove(int x, int y)
     {
         this.x = x;
@@ -165,6 +177,8 @@ public class AI {
         System.out.println(board.board[x][y].coordinate);
 
         printDanger();
+
+        searchAndShoot();
 
         System.out.println();
     }
@@ -247,6 +261,163 @@ public class AI {
     }
 
 
+    public void shootArrow(String direction)
+    {
+        Coordinate arrowPosition = new Coordinate(this.x,this.y);
+
+        if(direction.equals("up"))
+        {
+            while(arrowPosition.x >= 0)
+            {
+                System.out.println("Arrow position: " + arrowPosition);
+
+                if(wumpusCheck(arrowPosition))
+                {
+                    System.out.println("Wumpus Died!");
+                    break;
+                }
+
+                arrowPosition.x--;
+            }
+        }
+
+        else if(direction.equals("down"))
+        {
+            while(arrowPosition.x < board.size)
+            {
+                System.out.println("Arrow position: " + arrowPosition);
+
+                if(wumpusCheck(arrowPosition))
+                {
+                    System.out.println("Wumpus Died!");
+                    break;
+                }
+
+                arrowPosition.x++;
+            }
+        }
+
+        else if(direction.equals("left"))
+        {
+            while(arrowPosition.y >= 0)
+            {
+                System.out.println("Arrow position: " + arrowPosition);
+
+                if(wumpusCheck(arrowPosition))
+                {
+                    System.out.println("Wumpus Died!");
+                    break;
+                }
+
+                arrowPosition.y--;
+            }
+        }
+
+        else if(direction.equals("right"))
+        {
+            while(arrowPosition.y < board.size)
+            {
+                System.out.println("Arrow position: " + arrowPosition);
+
+                if(wumpusCheck(arrowPosition))
+                {
+                    System.out.println("Wumpus Died!");
+                    break;
+                }
+
+                arrowPosition.y++;
+            }
+        }
+    }
+
+    private boolean wumpusCheck(Coordinate coordinate)
+    {
+        if(actualBoard.board[coordinate.x][coordinate.y].wumpus == GridStatus.CONFIRMED)
+        {
+            actualBoard.board[coordinate.x][coordinate.y].wumpus = GridStatus.NOT_CONTAINS;
+            return true;
+        }
+
+        return false;
+    }
+
+    private String wumpusShootable(Coordinate coordinate)
+    {
+        Coordinate wumpusLocation;
+
+        for(int i=0; i< board.size;i++)
+        {
+            for(int j=0;j< board.size;j++)
+            {
+                if(board.board[i][j].wumpus == GridStatus.CONFIRMED)
+                {
+                    wumpusLocation = new Coordinate(i,j);
+
+                    if(wumpusLocation.x == coordinate.x)
+                    {
+                        if(wumpusLocation.y < coordinate.y)
+                        {
+                            return "left";
+                        }
+
+                        else
+                        {
+                            return "right";
+                        }
+                    }
+
+                    else if(wumpusLocation.y == coordinate.y)
+                    {
+                        if(wumpusLocation.x < coordinate.x)
+                        {
+                            return "up";
+                        }
+
+                        else
+                        {
+                            return "down";
+                        }
+                    }
+                }
+            }
+
+            for(int j=0;j< board.size;j++)
+            {
+                if(board.board[i][j].wumpus == GridStatus.PROBABLE)
+                {
+                    wumpusLocation = new Coordinate(i,j);
+
+                    if(wumpusLocation.x == coordinate.x)
+                    {
+                        if(wumpusLocation.y < coordinate.y)
+                        {
+                            return "left";
+                        }
+
+                        else
+                        {
+                            return "right";
+                        }
+                    }
+
+                    else if(wumpusLocation.y == coordinate.y)
+                    {
+                        if(wumpusLocation.x < coordinate.x)
+                        {
+                            return "up";
+                        }
+
+                        else
+                        {
+                            return "down";
+                        }
+                    }
+                }
+            }
+        }
+
+        return "No";
+    }
 
 }
 

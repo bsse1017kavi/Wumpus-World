@@ -47,8 +47,10 @@ public class Controller implements Initializable {
         Coordinate[] pits = {new Coordinate(0, 2), new Coordinate(2, 2), new Coordinate(3, 3)};
 
         board = new Board();
-        // board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
-        board.generateRandomBoard(5, 2, 2);
+
+        //board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
+        board.generateRandomBoard(5,2,1);
+
         board.printBoard();
 
         AI ai = new AI(board);
