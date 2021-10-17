@@ -228,7 +228,7 @@ public class EditorController implements Initializable {
 
     private double processY(MouseEvent e) {
         double y = e.getSceneY();
-        y = Math.floor((y - 115) / 56.9) * 56.9 + 143;
+        y = Math.floor((y - 115) / 56.9) * 57.25 + 143;
         return y;
     }
 }

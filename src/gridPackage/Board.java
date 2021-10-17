@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Board
 {
-    public int size = 4;
+    public int size = 10;
 
     public GridCell[][] board = new GridCell[size][size];
 
