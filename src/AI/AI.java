@@ -91,7 +91,7 @@ public class AI {
                     return;
                 }
 
-                if(neighbour.visited && !queue.contains(neighbour))
+                if(neighbour.visited && !qContains(queue, neighbour))
                 {
                     queue.add(new WrappedCell(neighbour, i));
                 }
@@ -103,12 +103,32 @@ public class AI {
         //check wumpus shootable spot - Will not use this strategy
 
         //unsafe move
-        ArrayList<GridCell> neighbours = board.getAdjacentCells(x,y);
+//        ArrayList<GridCell> neighbours = board.getAdjacentCells(x,y);
+//        makeMove(neighbours.get(0).coordinate.x, neighbours.get(0).coordinate.y);
 
-        for(GridCell neighbour: neighbours)
+        // stalemate = true;
+        if ((y+1)<board.size)
         {
-            makeMove(neighbour.coordinate.x, neighbour.coordinate.y);
+            makeMove(x,y+1);
+            // playSquidBFS();
         }
+        else if (x + 1 < board.size)
+            makeMove(x+1, y);
+        
+
+//        for(GridCell neighbour: neighbours)
+//        {
+//            makeMove(neighbour.coordinate.x, neighbour.coordinate.y);
+//        }
+    }
+
+    private boolean qContains(ArrayList<WrappedCell> q, GridCell neighbour) {
+        for(WrappedCell w: q)
+        {
+            if(w.cell.equals(neighbour))
+                return true;
+        }
+        return false;
     }
 
 

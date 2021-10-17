@@ -392,6 +392,15 @@ public class EditorController implements Initializable {
 
     @FXML
     public void reset() {
-
+        board = new Board();
+        ai = new AI(board);
+        popUpOpen = false;
+        fiveSecondsWonder = new Timeline();
+        paused = false;
+        playing = false;
+        banner.getChildren().clear();
+        clearGrid();
+        displayBoard(ai);
+        fiveSecondsWonder.stop();
     }
 }
