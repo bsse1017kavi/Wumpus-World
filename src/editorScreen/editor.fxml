@@ -6,9 +6,8 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editorScreen.EditorController">
    <children>
       <ImageView fitHeight="800.0" fitWidth="1789.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -16,7 +15,7 @@
             <Image url="file:/F:/IIT/Projects/Java/onePlus/src/res/wumpus.png" />
          </image>
       </ImageView>
-      <GridPane fx:id="grid" alignment="CENTER" gridLinesVisible="true" layoutX="157.0" layoutY="116.0" prefHeight="569.0" prefWidth="824.0">
+      <GridPane fx:id="grid" alignment="CENTER" gridLinesVisible="true" layoutX="157.0" layoutY="116.0" onMouseClicked="#mouseEntered" prefHeight="569.0" prefWidth="824.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -43,6 +42,5 @@
         </rowConstraints>
 
             </GridPane>
-      <StackPane fx:id="stackPane" prefHeight="800.0" prefWidth="1067.0" />
    </children>
 </AnchorPane>
