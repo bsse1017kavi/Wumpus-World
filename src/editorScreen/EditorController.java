@@ -46,7 +46,7 @@ public class EditorController implements Initializable {
     AI ai;
     boolean popUpOpen = false;
     Timeline fiveSecondsWonder;
-    boolean paused = false;
+    boolean paused = false, playing = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,7 +57,6 @@ public class EditorController implements Initializable {
         ai = new AI(board);
         ai.makeMove(0, 0);
 
-        displayBoard(ai);
         displayBoard(ai);
 
 
@@ -110,6 +109,15 @@ public class EditorController implements Initializable {
                 if(board.board[i][j].stench == GridStatus.CONFIRMED)
                 {
                     setImage(i, j, "stench.png", 52, 40);
+                }
+
+                if(playing && !ai.board.board[i][j].visited)
+                {
+                    // setImage(i, j, "fow.png", 57, 84);
+                    AnchorPane ap = new AnchorPane();
+                    ap.setStyle("-fx-background-color: #000000");
+                    ap.setOpacity(0.6);
+                    (getNode(i, j)).getChildren().add(ap);
                 }
             }
         }
@@ -186,22 +194,6 @@ public class EditorController implements Initializable {
         ImageView imageView = getImageView(fileName, height, width);
 
         (getNode(i, j)).getChildren().add(imageView);
-
-//        if(getNode(i, j).getChildren().size() == 0) {
-//            System.out.println("True");
-//            HBox hBox = new HBox();
-//            hBox.setMaxHeight(height);
-//            hBox.setMinHeight(height);
-//            hBox.setMaxWidth(width);
-//            hBox.setMinWidth(width);
-//            hBox.getChildren().add(imageView);
-//            (getNode(i, j)).getChildren().add(hBox);
-//        }
-//        else
-//            ((HBox) (getNode(i, j).getChildren().get(0)) ).getChildren().add(imageView);
-
-
-        // addElement(imageView, i, j);
     }
 
     private ImageView getImageView(String fileName, int height, int width) {
@@ -301,6 +293,7 @@ public class EditorController implements Initializable {
         int nP = Integer.parseInt(pitN.getText().trim());
         int nG = Integer.parseInt(goldN.getText().trim());
         int nW = Integer.parseInt(wumpusN.getText().trim());
+        playing = true;
 
         banner.getChildren().clear();
 
@@ -314,10 +307,11 @@ public class EditorController implements Initializable {
         AI ai = new AI(board);
         ai.makeMove(0, 0);
 
+        clearGrid();
         displayBoard(ai);
 
         fiveSecondsWonder = new Timeline(
-                new KeyFrame(Duration.seconds(0.5),
+                new KeyFrame(Duration.seconds(1),
                         event -> {
                             if(paused)
                                 return;
@@ -354,10 +348,12 @@ public class EditorController implements Initializable {
 
     @FXML
     public void customGame(){
+        playing = true;
         paused = false;
         AI ai = new AI(board);
         ai.makeMove(0, 0);
 
+        clearGrid();
         displayBoard(ai);
 
         fiveSecondsWonder = new Timeline(
