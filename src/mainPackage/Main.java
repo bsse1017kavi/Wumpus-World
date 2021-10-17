@@ -14,7 +14,7 @@ public class Main
 
         Board board = new Board();
         board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
-        board.printBoard();
+        // board.printBoard();
 
         System.out.println();
 

@@ -310,7 +310,6 @@ public class EditorController implements Initializable {
         board = new Board();
         board.generateRandomBoard(nP, nW, nG);
 
-        board.printBoard();
 
         AI ai = new AI(board);
         ai.makeMove(0, 0);
@@ -320,6 +319,9 @@ public class EditorController implements Initializable {
         fiveSecondsWonder = new Timeline(
                 new KeyFrame(Duration.seconds(0.5),
                         event -> {
+                            if(paused)
+                                return;
+
                             if(ai.checkWin())
                             {
                                 System.out.println("WIN");
@@ -364,7 +366,7 @@ public class EditorController implements Initializable {
                             if(paused)
                                 return;
 
-                            if(ai.score == 1000)
+                            if(ai.checkWin())
                             {
                                 System.out.println("WIN");
                                 banner.getChildren().add(getImageView("win3.gif", 160, 220)); //130, 219

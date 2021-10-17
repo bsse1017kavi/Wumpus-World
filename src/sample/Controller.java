@@ -51,7 +51,6 @@ public class Controller implements Initializable {
         //board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
         board.generateRandomBoard(5,2,2);
 
-        board.printBoard();
 
         AI ai = new AI(board);
         ai.makeMove(0, 0);

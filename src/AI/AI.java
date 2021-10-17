@@ -36,11 +36,6 @@ public class AI {
     {
         ArrayList<GridCell> cells = board.getAdjacentCells(x, y);
 
-        for(GridCell cell: cells)
-        {
-            System.out.println(cell.coordinate);
-        }
-
         System.out.println();
 
         for(GridCell cell: cells)
@@ -156,7 +151,7 @@ public class AI {
 
         System.out.println(board.board[x][y].coordinate);
 
-        printDanger();
+        // printDanger();
 
         searchAndShoot();
 
