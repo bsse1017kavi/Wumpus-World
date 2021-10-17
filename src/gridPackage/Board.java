@@ -11,6 +11,8 @@ public class Board
 
     public GridCell[][] board = new GridCell[size][size];
 
+    public int numberOfWumpus, numberOfGold;
+
     public Board()
     {
         initBoard();
@@ -29,6 +31,9 @@ public class Board
 
     public void generateRandomBoard(int numberOfPits, int numberOfWumpus, int numberOfGold)
     {
+        this.numberOfWumpus = numberOfWumpus;
+        this.numberOfGold = numberOfGold;
+
         int pitCounter = numberOfPits;
         int wumpusCounter = numberOfWumpus;
         int goldCounter = numberOfGold;
