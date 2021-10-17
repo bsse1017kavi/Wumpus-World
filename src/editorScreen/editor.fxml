@@ -125,12 +125,12 @@
                   <Font name="System Bold" size="17.0" />
                </font>
             </RadioButton>
-            <Button fx:id="playButton" layoutX="20.0" layoutY="291.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="97.0" style="-fx-background-color: #43a047;" text="Play" textFill="WHITE">
+            <Button fx:id="playButton" layoutX="20.0" layoutY="291.0" mnemonicParsing="false" onAction="#customGame" prefHeight="43.0" prefWidth="97.0" style="-fx-background-color: #43a047;" text="Play" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Button>
-            <Button fx:id="pauseButton" layoutX="130.0" layoutY="291.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="97.0" style="-fx-background-color: #039be5;" text="Pause" textFill="WHITE">
+            <Button fx:id="pauseButton" layoutX="130.0" layoutY="291.0" mnemonicParsing="false" onAction="#pause" prefHeight="43.0" prefWidth="97.0" style="-fx-background-color: #039be5;" text="Pause" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

@@ -46,6 +46,7 @@ public class EditorController implements Initializable {
     AI ai;
     boolean popUpOpen = false;
     Timeline fiveSecondsWonder;
+    boolean paused = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -120,6 +121,9 @@ public class EditorController implements Initializable {
         try {
             int a  = (int) Math.round((y - 143) / 57.25);
             int b = (int) Math.round((x - 200) / 82.4);
+
+            if(a == 0 && b == 0)
+                return;
 
             System.out.println(a + ", " + b);
 
@@ -201,7 +205,7 @@ public class EditorController implements Initializable {
 
     private ImageView getImageView(String fileName, int height, int width) {
         ImageView imageView = new ImageView();
-        Image ix = new Image(new File("F:\\IIT\\Projects\\Java\\onePlus\\src\\res\\"+fileName).toURI().toString());
+        Image ix = new Image(new File("src\\res\\"+fileName).toURI().toString());
         imageView.setImage(ix);
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
@@ -228,8 +232,6 @@ public class EditorController implements Initializable {
         System.out.println(e.getSceneY());
 
         Node node = (Node) e.getPickResult().getIntersectedNode();
-        System.out.println("Baal");
-        System.out.println();
 
         boolean clicked = false;
         StackPane stackPane = new StackPane();
@@ -237,7 +239,7 @@ public class EditorController implements Initializable {
         if(node instanceof StackPane)
         {
             System.out.println("Node");
-            System.out.println(node);
+            System.out.println(node.getId());
             clicked = true;
             stackPane = (StackPane) node;
         }
@@ -269,12 +271,6 @@ public class EditorController implements Initializable {
     private void openClosePopUp(MouseEvent e, StackPane pane) {
         if(!popUpOpen)
         {
-            System.out.println(e.getSource());
-            System.out.println("Shit:");
-            System.out.println(pane.getWidth());
-            System.out.println(e.getSceneX() + ", " + e.getSceneY());
-            System.out.println( processX(e, pane.getWidth()) + ", " + processY(e));
-            System.out.println("\n\n");
             loadPopUp(processX(e, pane.getWidth()), processY(e));
             // ((Node)e.getSource()).setStyle("-fx-border-color:red; -fx-border-width:2px;");
             popUpOpen = true;
@@ -311,7 +307,6 @@ public class EditorController implements Initializable {
         // board.generateRandomBoard(nP, nW, nG);
 
         board = new Board();
-        //board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
         board.generateRandomBoard(nP, nW, nG);
 
         board.printBoard();
@@ -352,5 +347,51 @@ public class EditorController implements Initializable {
         pitN.clear();
         wumpusN.clear();
         goldN.clear();
+    }
+
+    @FXML
+    public void customGame(){
+        AI ai = new AI(board);
+        ai.makeMove(0, 0);
+
+        displayBoard(ai);
+
+        fiveSecondsWonder = new Timeline(
+                new KeyFrame(Duration.seconds(0.5),
+                        event -> {
+                            if(paused)
+                                return;
+
+                            if(ai.score == 1000)
+                            {
+                                System.out.println("WIN");
+                                banner.getChildren().add(getImageView("win3.gif", 160, 220)); //130, 219
+                                fiveSecondsWonder.stop();
+                            }
+                            else if (ai.score == -1000)
+                            {
+                                System.out.println("LOSE");
+                                banner.getChildren().add(getImageView("loss2.gif", 130, 219)); //130, 219
+                                fiveSecondsWonder.stop();
+                            }
+                            else {
+                                ai.playSquidBFS();
+                                clearGrid();
+                                displayBoard(ai);
+                            }
+
+                        }));
+        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+        fiveSecondsWonder.play();
+    }
+
+    @FXML
+    public void pause() {
+        paused = !paused;
+    }
+
+    @FXML
+    public void reset() {
+
     }
 }

@@ -190,25 +190,4 @@ public class Controller implements Initializable {
     public StackPane getNode (final int row, final int column) {
         return (StackPane) grid.getChildren().get(board.size * row + column + 1);
     }
-
-    /*private void shit(int x1, int y1, int x2, int y2) {
-
-
-
-
-        TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.seconds(3));
-        translateTransition.setToX(20);
-        translateTransition.setToY(20);
-        translateTransition.setNode(r);
-        translateTransition.play();
-        //when translation is finished remove from original location
-        //add to desired location and set translation to 0
-        translateTransition.setOnFinished(e->{
-            grid.getChildren().remove(r);
-            r.setTranslateX(0); r.setTranslateY(0);
-            grid.add(r, 1, 4);
-        });
-
-    }*/
 }
