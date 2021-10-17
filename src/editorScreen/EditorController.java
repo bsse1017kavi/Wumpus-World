@@ -201,7 +201,7 @@ public class EditorController implements Initializable {
 
     private ImageView getImageView(String fileName, int height, int width) {
         ImageView imageView = new ImageView();
-        Image ix = new Image(new File("F:\\IIT\\Projects\\Java\\onePlus\\src\\res\\"+fileName).toURI().toString());
+        Image ix = new Image(new File("src\\res\\"+fileName).toURI().toString());
         imageView.setImage(ix);
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
@@ -324,7 +324,7 @@ public class EditorController implements Initializable {
         fiveSecondsWonder = new Timeline(
                 new KeyFrame(Duration.seconds(0.5),
                         event -> {
-                            if(ai.score == 1000)
+                            if(ai.checkWin())
                             {
                                 System.out.println("WIN");
                                 banner.getChildren().add(getImageView("win3.gif", 160, 220)); //130, 219

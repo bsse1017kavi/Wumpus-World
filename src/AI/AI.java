@@ -105,7 +105,15 @@ public class AI {
 
         }
 
-        //check wumpus shootable spot
+        //check wumpus shootable spot - Will not use this strategy
+
+        //unsafe move
+        ArrayList<GridCell> neighbours = board.getAdjacentCells(x,y);
+
+        for(GridCell neighbour: neighbours)
+        {
+            makeMove(neighbour.coordinate.x, neighbour.coordinate.y);
+        }
     }
 
 
