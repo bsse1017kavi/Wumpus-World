@@ -27,6 +27,10 @@ public class Main
 
          AI ai = new AI(board);
 
+         ai.makeMove(0,0);
+
+         ai.shootArrow("down");
+
 //         ai.makeMove(0, 0);
 //         ai.playSquidBFS();
 
