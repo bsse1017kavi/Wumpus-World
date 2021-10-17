@@ -17,8 +17,8 @@
    <children>
       <ImageView fitHeight="800.0" fitWidth="1789.0" pickOnBounds="true" preserveRatio="true">
          <image>
-              <Image url="res/wumpus.png" />
-            <!--<Image url="file:/F:/IIT/Projects/Java/onePlus/src/res/wumpus.png" />-->
+             <!-- <Image url="res/wumpus.png" /> -->
+            <Image url="file:/F:/IIT/Projects/Java/onePlus/src/res/wumpus.png" />
          </image>
       </ImageView>
       <GridPane fx:id="grid" alignment="CENTER" gridLinesVisible="true" layoutX="157.0" layoutY="116.0" onMouseClicked="#mouseEntered" prefHeight="569.0" prefWidth="824.0">
@@ -76,7 +76,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Button>
-            <Button fx:id="confirmButton" layoutX="29.0" layoutY="643.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="193.0" style="-fx-background-color: #388e3c;" text="Confirm" textFill="WHITE">
+            <Button fx:id="confirmButton" layoutX="29.0" layoutY="643.0" mnemonicParsing="false" onAction="#randomRun" prefHeight="43.0" prefWidth="193.0" style="-fx-background-color: #388e3c;" text="Confirm" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

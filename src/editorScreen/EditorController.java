@@ -5,6 +5,8 @@ import gridPackage.Board;
 import gridPackage.Coordinate;
 import gridPackage.GridCell;
 import gridPackage.GridStatus;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +45,7 @@ public class EditorController implements Initializable {
     Board board;
     AI ai;
     boolean popUpOpen = false;
+    Timeline fiveSecondsWonder;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -278,12 +282,57 @@ public class EditorController implements Initializable {
     }
 
     @FXML
-    private void randomRun(MouseEvent e) {
+    private void randomRun() {
+        System.out.println(pitN.getText().trim() + "asdfasdfasdfasdfasdfasdfasdfasdf");
         int nP = Integer.parseInt(pitN.getText().trim());
         int nG = Integer.parseInt(goldN.getText().trim());
         int nW = Integer.parseInt(wumpusN.getText().trim());
 
+        // board = new Board();
+        // board.generateRandomBoard(nP, nW, nG);
+
         board = new Board();
-        board.generateRandomBoard(nP, nW, nG);
+        //board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
+        board.generateRandomBoard(5,2,1);
+
+        board.printBoard();
+
+        AI ai = new AI(board);
+        ai.makeMove(0, 0);
+
+        displayBoard(ai);
+
+        fiveSecondsWonder = new Timeline(
+                new KeyFrame(Duration.seconds(1),
+                        event -> {
+                            if(ai.score == 1000)
+                            {
+                                System.out.println("WIN");
+                                fiveSecondsWonder.stop();
+//                                if(stackPane.getChildren().size() == 0)
+//                                {
+//                                    stackPane.getChildren().add(getImageView("win.gif", 200, 600));
+//                                    System.out.println("WIN");
+//                                }
+                            }
+                            else if (ai.score == -1000)
+                            {
+                                System.out.println("LOSE");
+                                fiveSecondsWonder.stop();
+//                                if(stackPane.getChildren().size() == 0)
+//                                {
+//                                    stackPane.getChildren().add(getImageView("loss.gif", 200, 600));
+//                                    System.out.println("LOSS");
+//                                }
+                            }
+                            else {
+                                ai.playSquidBFS();
+                                clearGrid();
+                                displayBoard(ai);
+                            }
+
+                        }));
+        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+        fiveSecondsWonder.play();
     }
 }
