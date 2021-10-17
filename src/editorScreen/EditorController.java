@@ -320,7 +320,7 @@ public class EditorController implements Initializable {
         fiveSecondsWonder = new Timeline(
                 new KeyFrame(Duration.seconds(0.5),
                         event -> {
-                            if(ai.score == 1000)
+                            if(ai.checkWin())
                             {
                                 System.out.println("WIN");
                                 banner.getChildren().add(getImageView("win3.gif", 160, 220)); //130, 219
