@@ -54,7 +54,6 @@ public class EditorController implements Initializable {
         Coordinate[] pits = {new Coordinate(0, 2), new Coordinate(2, 2), new Coordinate(3, 3)};
 
         board = new Board();
-        // board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
         ai = new AI(board);
         ai.makeMove(0, 0);
 
@@ -136,6 +135,7 @@ public class EditorController implements Initializable {
                 board.board[a][b].setPit(GridStatus.UNCONFIRMED);
                 board.board[a][b].setGold(GridStatus.UNCONFIRMED);
                 board.board[a][b].setWumpus(GridStatus.CONFIRMED);
+                board.numberOfWumpus+=1;
                 board.generateEnvironment();
                 clearGrid();
                 displayBoard(ai);
@@ -154,6 +154,7 @@ public class EditorController implements Initializable {
                 board.board[a][b].setGold(GridStatus.CONFIRMED);
                 board.board[a][b].setWumpus(GridStatus.UNCONFIRMED);
                 board.board[a][b].setPit(GridStatus.UNCONFIRMED);
+                board.numberOfGold+=1;
                 board.generateEnvironment();
                 clearGrid();
                 displayBoard(ai);
@@ -351,6 +352,7 @@ public class EditorController implements Initializable {
 
     @FXML
     public void customGame(){
+        paused = false;
         AI ai = new AI(board);
         ai.makeMove(0, 0);
 
