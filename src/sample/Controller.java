@@ -47,7 +47,8 @@ public class Controller implements Initializable {
         Coordinate[] pits = {new Coordinate(0, 2), new Coordinate(2, 2), new Coordinate(3, 3)};
 
         board = new Board();
-        board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
+        // board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
+        board.generateRandomBoard(5, 2, 2);
         board.printBoard();
 
         AI ai = new AI(board);
@@ -111,7 +112,7 @@ public class Controller implements Initializable {
 
                 if(board.board[i][j].wumpus == GridStatus.CONFIRMED)
                 {
-                    setImage(i, j, "monster.gif");
+                    setImage(i, j, "monster2.gif");
                 }
 
                 if(board.board[i][j].gold == GridStatus.CONFIRMED)
@@ -165,7 +166,7 @@ public class Controller implements Initializable {
 
     private ImageView getImageView(String fileName, int height, int width) {
         ImageView imageView = new ImageView();
-        Image ix = new Image(new File("F:\\IIT\\Projects\\Java\\onePlus\\src\\res\\"+fileName).toURI().toString());
+        Image ix = new Image(new File("src\\res\\"+fileName).toURI().toString());
         imageView.setImage(ix);
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);

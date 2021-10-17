@@ -14,5 +14,8 @@
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1fff38" height="56.9" layoutX="77.0" layoutY="62.0" opacity="0.25" stroke="BLACK" strokeType="INSIDE" width="82.0" />
+      <AnchorPane layoutX="47.0" layoutY="21.0" prefHeight="37.0" prefWidth="65.0" rotate="-29.1" />
+      <AnchorPane layoutX="121.0" layoutY="19.0" prefHeight="37.0" prefWidth="65.0" rotate="20.4" />
+      <AnchorPane layoutX="-2.0" layoutY="76.0" prefHeight="37.0" prefWidth="65.0" rotate="-66.0" />
    </children>
 </AnchorPane>
