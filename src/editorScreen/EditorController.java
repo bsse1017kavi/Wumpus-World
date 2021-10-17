@@ -3,23 +3,22 @@ package editorScreen;
 import AI.AI;
 import gridPackage.Board;
 import gridPackage.Coordinate;
+import gridPackage.GridCell;
 import gridPackage.GridStatus;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +33,14 @@ public class EditorController implements Initializable {
     @FXML
     AnchorPane anchorPane;
 
+    @FXML
+    Button confirmButton, clearButton, playButton, pauseButton, resetButton;
+
+    @FXML
+    TextField pitN, wumpusN, goldN;
+
     Board board;
+    AI ai;
     boolean popUpOpen = false;
 
     @Override
@@ -43,9 +49,8 @@ public class EditorController implements Initializable {
         Coordinate[] pits = {new Coordinate(0, 2), new Coordinate(2, 2), new Coordinate(3, 3)};
 
         board = new Board();
-        board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
-
-        AI ai = new AI(board);
+        // board.generateTestBoard(new Coordinate(2, 0), new Coordinate(2, 1), pits);
+        ai = new AI(board);
         ai.makeMove(0, 0);
 
         displayBoard(ai);
@@ -107,11 +112,52 @@ public class EditorController implements Initializable {
 
     private void loadPopUp(double x, double y) {
         try {
-            Node n = FXMLLoader.load(getClass().getResource("popUp.fxml"));
+            int a  = (int) Math.round((y - 143) / 57.25);
+            int b = (int) Math.round((x - 200) / 82.4);
+
+            System.out.println(a + ", " + b);
+
+            AnchorPane n = FXMLLoader.load(getClass().getResource("popUp.fxml"));
             n.setOnMouseClicked(e -> {
                 anchorPane.getChildren().remove(anchorPane.getChildren().size()-1);
                 popUpOpen = false;
             });
+            n.getChildren().get(2).setOnMouseClicked(e -> {
+                board.board[a][b].setPit(GridStatus.UNCONFIRMED);
+                board.board[a][b].setGold(GridStatus.UNCONFIRMED);
+                board.board[a][b].setWumpus(GridStatus.CONFIRMED);
+                board.generateEnvironment();
+                clearGrid();
+                displayBoard(ai);
+            });
+
+            n.getChildren().get(3).setOnMouseClicked(e -> {
+                board.board[a][b].setWumpus(GridStatus.UNCONFIRMED);
+                board.board[a][b].setGold(GridStatus.UNCONFIRMED);
+                board.board[a][b].setPit(GridStatus.CONFIRMED);
+                board.generateEnvironment();
+                clearGrid();
+                displayBoard(ai);
+            });
+
+            n.getChildren().get(4).setOnMouseClicked(e -> {
+                board.board[a][b].setGold(GridStatus.CONFIRMED);
+                board.board[a][b].setWumpus(GridStatus.UNCONFIRMED);
+                board.board[a][b].setPit(GridStatus.UNCONFIRMED);
+                board.generateEnvironment();
+                clearGrid();
+                displayBoard(ai);
+            });
+
+            n.getChildren().get(5).setOnMouseClicked(e -> {
+                board.board[a][b].setWumpus(GridStatus.UNCONFIRMED);
+                board.board[a][b].setPit(GridStatus.UNCONFIRMED);
+                board.board[a][b].setGold(GridStatus.UNCONFIRMED);
+                board.generateEnvironment();
+                clearGrid();
+                displayBoard(ai);
+            });
+
             n.setTranslateX(x - 120);
             n.setTranslateY(y - 90);
             anchorPane.getChildren().add(n);
@@ -178,28 +224,36 @@ public class EditorController implements Initializable {
         Node node = (Node) e.getPickResult().getIntersectedNode();
 
         boolean clicked = false;
+        StackPane stackPane = new StackPane();
 
         if(node instanceof StackPane)
+        {
             clicked = true;
+            stackPane = (StackPane) node;
+        }
 
         Node p = node.getParent();
         while (p != null && !(p instanceof StackPane))
             p = p.getParent();
 
         if(p!=null)
+        {
             clicked = true;
+            stackPane = (StackPane) p;
+        }
 
         if(clicked)
             {
-                openClosePopUp(e);
+                openClosePopUp(e, stackPane);
             }
 
 
     }
 
-    private void openClosePopUp(MouseEvent e) {
+    private void openClosePopUp(MouseEvent e, StackPane pane) {
         if(!popUpOpen)
         {
+            System.out.println(e.getSource());
             loadPopUp(processX(e), processY(e));
             // ((Node)e.getSource()).setStyle("-fx-border-color:red; -fx-border-width:2px;");
             popUpOpen = true;
@@ -221,5 +275,15 @@ public class EditorController implements Initializable {
         double y = e.getSceneY();
         y = Math.floor((y - 115) / 56.9) * 57.25 + 143;
         return y;
+    }
+
+    @FXML
+    private void randomRun(MouseEvent e) {
+        int nP = Integer.parseInt(pitN.getText().trim());
+        int nG = Integer.parseInt(goldN.getText().trim());
+        int nW = Integer.parseInt(wumpusN.getText().trim());
+
+        board = new Board();
+        board.generateRandomBoard(nP, nW, nG);
     }
 }

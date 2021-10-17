@@ -13,6 +13,10 @@ public class Board
 
     public Board()
     {
+        initBoard();
+    }
+
+    private void initBoard() {
         for(int i=0;i<size;i++)
         {
             for(int j=0;j<size;j++)
@@ -103,6 +107,14 @@ public class Board
 
     public void generateEnvironment()
     {
+
+        for(int i=0;i<size;i++) {
+            for (int j = 0; j < size; j++) {
+                board[i][j].breeze = GridStatus.UNCONFIRMED;
+                board[i][j].stench = GridStatus.UNCONFIRMED;
+            }
+        }
+
         for(int i=0;i<size;i++)
         {
             for(int j=0;j<size;j++)
@@ -134,6 +146,31 @@ public class Board
                         board[i+1][j].breeze = GridStatus.CONFIRMED;
                     }
                 }
+//                else {
+//                    //left
+//                    if(j>0)
+//                    {
+//                        board[i][j-1].breeze = GridStatus.UNCONFIRMED;
+//                    }
+//
+//                    //right
+//                    if(j<size-1)
+//                    {
+//                        board[i][j+1].breeze = GridStatus.UNCONFIRMED;
+//                    }
+//
+//                    //up
+//                    if(i>0)
+//                    {
+//                        board[i-1][j].breeze = GridStatus.UNCONFIRMED;
+//                    }
+//
+//                    //down
+//                    if(i<size-1)
+//                    {
+//                        board[i+1][j].breeze = GridStatus.UNCONFIRMED;
+//                    }
+//                }
 
                 //stench
                 if(board[i][j].wumpus == GridStatus.CONFIRMED)
@@ -162,6 +199,31 @@ public class Board
                         board[i+1][j].stench = GridStatus.CONFIRMED;
                     }
                 }
+//                else {
+//                    //left
+//                    if(j>0)
+//                    {
+//                        board[i][j-1].stench = GridStatus.UNCONFIRMED;
+//                    }
+//
+//                    //right
+//                    if(j<size-1)
+//                    {
+//                        board[i][j+1].stench = GridStatus.UNCONFIRMED;
+//                    }
+//
+//                    //up
+//                    if(i>0)
+//                    {
+//                        board[i-1][j].stench = GridStatus.UNCONFIRMED;
+//                    }
+//
+//                    //down
+//                    if(i<size-1)
+//                    {
+//                        board[i+1][j].stench = GridStatus.UNCONFIRMED;
+//                    }
+//                }
             }
         }
     }
