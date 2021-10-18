@@ -395,12 +395,12 @@ public class EditorController implements Initializable {
         board = new Board();
         ai = new AI(board);
         popUpOpen = false;
+        fiveSecondsWonder.stop();
         fiveSecondsWonder = new Timeline();
         paused = false;
         playing = false;
         banner.getChildren().clear();
         clearGrid();
         displayBoard(ai);
-        fiveSecondsWonder.stop();
     }
 }

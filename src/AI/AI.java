@@ -114,7 +114,7 @@ public class AI {
         }
         else if (x + 1 < board.size)
             makeMove(x+1, y);
-        
+
 
 //        for(GridCell neighbour: neighbours)
 //        {
